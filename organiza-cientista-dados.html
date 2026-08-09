@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conceitos de BI &amp; Ciência de Dados — Guia de Estudo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F2EC;
+    --surface:#FFFFFF;
+    --border:#D8D3C8;
+    --text:#1C1A17;
+    --text-secondary:#7A7265;
+    --text-faded:#B0A898;
+    --blue:#2D5BE3;
+    --blue-bg:#EBF0FD;
+    --green:#1E7A4A;
+    --green-bg:#E8F5EE;
+    --amber:#92510A;
+    --amber-bg:#FDF3E3;
+    --red:#B4232E;
+    --red-bg:#FBEAEC;
+    --shadow:0 2px 24px rgba(28,26,23,.07);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope',sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{
+    font-family:'Instrument Serif', serif;
+    font-weight:400;
+    line-height:1.2;
+    margin:0 0 .5em 0;
+  }
+  code, .mono{ font-family:'DM Mono', monospace; }
+  a{ color:var(--blue); }
+
+  .layout{
+    display:flex;
+    min-height:100vh;
+    max-width:1280px;
+    margin:0 auto;
+  }
+
+  /* SIDEBAR */
+  .sidebar{
+    width:270px;
+    flex-shrink:0;
+    padding:28px 16px 40px 20px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .sidebar-title{
+    font-family:'Instrument Serif', serif;
+    font-size:1.5rem;
+    margin-bottom:2px;
+  }
+  .sidebar-sub{
+    color:var(--text-secondary);
+    font-size:.8rem;
+    margin-bottom:22px;
+  }
+  .nav-search{
+    width:100%;
+    padding:9px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--surface);
+    font-family:'Manrope',sans-serif;
+    font-size:.85rem;
+    margin-bottom:18px;
+    outline:none;
+    color:var(--text);
+  }
+  .nav-search:focus{ border-color:var(--blue); }
+  .nav-group-label{
+    font-family:'DM Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    font-size:.68rem;
+    color:var(--text-faded);
+    margin:18px 0 6px 10px;
+  }
+  .nav-group-label:first-of-type{ margin-top:0; }
+  .nav-item{
+    display:block;
+    padding:8px 10px;
+    border-radius:8px;
+    color:var(--text-secondary);
+    text-decoration:none;
+    font-size:.88rem;
+    cursor:pointer;
+    margin-bottom:2px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-item:hover{ background:#EFEBE1; color:var(--text); }
+  .nav-item.active{
+    background:var(--blue-bg);
+    color:var(--blue);
+    font-weight:600;
+  }
+
+  /* MAIN */
+  .main{
+    flex:1;
+    padding:36px 40px 80px 40px;
+    min-width:0;
+  }
+  .content-section{ display:none; animation:fade .18s ease; }
+  .content-section.active{ display:block; }
+  @keyframes fade{ from{opacity:0;} to{opacity:1;} }
+
+  .eyebrow{
+    font-family:'DM Mono', monospace;
+    color:var(--blue);
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-bottom:6px;
+  }
+  h2.section-title{ font-size:2.1rem; max-width:760px; }
+  .article{ max-width:760px; }
+  h3.sub{ font-size:1.35rem; margin-top:34px; color:var(--text); }
+  p{ margin:0 0 14px 0; }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px 20px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+  }
+  .callout{
+    border-radius:12px;
+    padding:14px 18px;
+    margin:10px 0 18px 0;
+    border-left:4px solid var(--blue);
+    background:var(--blue-bg);
+  }
+  .callout.amber{ border-left-color:var(--amber); background:var(--amber-bg); }
+  .callout.green{ border-left-color:var(--green); background:var(--green-bg); }
+  .callout.red{ border-left-color:var(--red); background:var(--red-bg); }
+  .callout-label{
+    font-family:'DM Mono', monospace;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    margin-bottom:4px;
+    display:block;
+  }
+  .callout.amber .callout-label{ color:var(--amber); }
+  .callout.green .callout-label{ color:var(--green); }
+  .callout.red .callout-label{ color:var(--red); }
+  .callout .callout-label{ color:var(--blue); }
+
+  details{
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--surface);
+    padding:12px 16px;
+    margin:8px 0 18px 0;
+  }
+  details summary{
+    cursor:pointer;
+    font-weight:600;
+    font-family:'DM Mono', monospace;
+    font-size:.82rem;
+    color:var(--blue);
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  details summary::-webkit-details-marker{ display:none; }
+  details summary svg{ transition:transform .15s ease; flex-shrink:0; }
+  details[open] summary svg{ transform:rotate(90deg); }
+  details .details-body{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+
+  ul, ol{ padding-left:22px; margin:0 0 16px 0; }
+  li{ margin-bottom:6px; }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    font-size:.85rem;
+  }
+  th, td{
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  th{
+    background:#F5F2EC;
+    font-family:'DM Mono', monospace;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--text-secondary);
+  }
+  tr:last-child td{ border-bottom:none; }
+  .table-wrap{ overflow-x:auto; border-radius:12px; margin-bottom:20px; }
+
+  .badge{
+    display:inline-block;
+    font-family:'DM Mono', monospace;
+    font-size:.7rem;
+    padding:3px 10px;
+    border-radius:999px;
+    background:var(--blue-bg);
+    color:var(--blue);
+    margin-right:6px;
+  }
+
+  /* base table (Loja Aurora) */
+  .raw-table td, .raw-table th{ font-family:'DM Mono', monospace; font-size:.78rem; }
+
+  /* video cards */
+  .video-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+    gap:14px;
+    margin:14px 0 10px 0;
+  }
+  .video-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .video-card .vtitle{ font-weight:700; font-size:.92rem; line-height:1.35; }
+  .video-meta{
+    font-family:'DM Mono', monospace;
+    font-size:.68rem;
+    color:var(--text-secondary);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .video-meta span{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:2px 8px;
+  }
+  .video-why{ font-size:.82rem; color:var(--text-secondary); flex:1; }
+  .video-link{
+    align-self:flex-start;
+    font-family:'DM Mono', monospace;
+    font-size:.75rem;
+    text-decoration:none;
+    color:var(--blue);
+    border:1px solid var(--blue);
+    border-radius:8px;
+    padding:6px 12px;
+    transition:background .15s ease;
+  }
+  .video-link:hover{ background:var(--blue-bg); }
+
+  /* flow diagram */
+  .flow{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin:20px 0;
+  }
+  .flow-step{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    font-family:'DM Mono', monospace;
+    font-size:.8rem;
+    box-shadow:var(--shadow);
+  }
+  .flow-arrow{ color:var(--text-faded); font-size:1rem; }
+
+  /* diffs */
+  .diff-block{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 20px;
+    margin-bottom:14px;
+  }
+  .diff-block h4{ font-size:1.05rem; margin-bottom:6px; }
+
+  /* checklist */
+  .checklist-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:.78rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:5px 10px;
+    border-radius:999px;
+    color:var(--text-secondary);
+  }
+  .checklist-topic{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 20px;
+    margin-bottom:14px;
+    box-shadow:var(--shadow);
+  }
+  .checklist-topic h4{ font-size:1.1rem; margin-bottom:10px; }
+  .level-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .level-btn{
+    font-family:'Manrope',sans-serif;
+    font-size:.78rem;
+    border:1px solid var(--border);
+    background:var(--bg);
+    border-radius:999px;
+    padding:6px 12px;
+    cursor:pointer;
+    color:var(--text-secondary);
+    transition:all .12s ease;
+  }
+  .level-btn:hover{ border-color:var(--blue); }
+  .level-btn.selected{
+    background:var(--blue-bg);
+    border-color:var(--blue);
+    color:var(--blue);
+    font-weight:700;
+  }
+
+  .toc-hint{
+    font-size:.78rem;
+    color:var(--text-faded);
+    margin-top:40px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+  }
+
+  @media (max-width: 860px){
+    .layout{ flex-direction:column; }
+    .sidebar{
+      width:100%;
+      height:auto;
+      position:relative;
+      border-bottom:1px solid var(--border);
+    }
+    .main{ padding:24px 18px 60px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="sidebar-title">Loja Aurora</div>
+    <div class="sidebar-sub">BI &amp; Ciência de Dados — guia de estudo</div>
+    <input class="nav-search" id="navSearch" type="text" placeholder="Buscar seção...">
+
+    <div class="nav-group-label">Início</div>
+    <a class="nav-item" data-target="intro">Exemplo-base: Loja Aurora</a>
+
+    <div class="nav-group-label">Os 8 conceitos</div>
+    <a class="nav-item" data-target="bi">1. Business Intelligence</a>
+    <a class="nav-item" data-target="dataviz">2. Data Visualization</a>
+    <a class="nav-item" data-target="etl">3. ETL Process</a>
+    <a class="nav-item" data-target="datamodeling">4. Data Modeling</a>
+    <a class="nav-item" data-target="cleaning">5. Cleaning / Transformation / Integration</a>
+    <a class="nav-item" data-target="quality">6. Data Quality</a>
+    <a class="nav-item" data-target="metrics">7. Metrics, KPIs and Dimensions</a>
+    <a class="nav-item" data-target="eda">8. EDA</a>
+
+    <div class="nav-group-label">Conectando os pontos</div>
+    <a class="nav-item" data-target="diffs">Diferenças entre conceitos parecidos</a>
+    <a class="nav-item" data-target="tools">Ferramentas por contexto</a>
+    <a class="nav-item" data-target="bigpicture">The Big Picture</a>
+    <a class="nav-item" data-target="reviewtable">Tabela de revisão</a>
+
+    <div class="nav-group-label">Prática</div>
+    <a class="nav-item" data-target="questions30">30 perguntas de revisão</a>
+    <a class="nav-item" data-target="interview">Simulação de entrevista</a>
+    <a class="nav-item" data-target="challenge">Desafio final</a>
+    <a class="nav-item" data-target="checklist">Checklist de domínio</a>
+  </nav>
+
+  <main class="main">
+
+    <!-- INTRO -->
+    <section class="content-section" id="sec-intro">
+      <div class="eyebrow">Ponto de partida</div>
+      <h2 class="section-title">Exemplo-base: Loja Aurora</h2>
+      <div class="article">
+        <p>Imagine estes dados brutos de vendas:</p>
+        <div class="table-wrap">
+          <table class="raw-table">
+            <thead>
+              <tr><th>OrderID</th><th>OrderDate</th><th>Product</th><th>Region</th><th>CustomerID</th><th>Revenue</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1001</td><td>2026-01-01</td><td>Laptop</td><td>SP</td><td>501</td><td>3500</td></tr>
+              <tr><td>1002</td><td>01/01/2026</td><td>Mouse</td><td>RJ</td><td>502</td><td>120</td></tr>
+              <tr><td>1003</td><td>2026-01-02</td><td>Laptop</td><td>SP</td><td>501</td><td>3500</td></tr>
+              <tr><td>1004</td><td>null</td><td>Headset</td><td>MG</td><td>503</td><td>260</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Esse tipo de base costuma vir de sistemas diferentes e com problemas como formatos de data inconsistentes, duplicados e valores nulos. É exatamente aí que entram limpeza, transformação, integração, modelagem, EDA, BI e visualização.</p>
+      </div>
+    </section>
+
+    <!-- 1. BI -->
+    <section class="content-section" id="sec-bi">
+      <div class="eyebrow">Conceito 1 de 8</div>
+      <h2 class="section-title">Business Intelligence (BI) / Inteligência de Negócios</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>BI é o jeito organizado de pegar dados da empresa e transformá-los em informação útil para decidir melhor. Pense como o "painel do carro" da empresa: mostra velocidade, combustível, temperatura e alertas para ajudar a dirigir.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>Em ambiente profissional, BI é um conjunto de processos, modelos, relatórios e ferramentas para coletar, preparar, analisar e apresentar dados de negócio de forma confiável, normalmente por meio de dashboards, métricas, relatórios e análises para tomada de decisão.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque empresas têm muitos dados espalhados em sistemas diferentes. Sem BI, cada área olha um pedaço da verdade e decide no escuro. BI resolve a dor de transformar dados dispersos em visão de negócio consistente.</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>Na Loja Aurora, BI pode mostrar: faturamento por mês, vendas por região, taxa de devolução, ticket médio e estoque baixo. O gerente não precisa abrir planilhas; ele vê um dashboard e age.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Excel ajuda em análises rápidas; SQL consulta os dados; Power BI, Tableau e Looker Studio criam dashboards; bancos de dados e data warehouses guardam os dados organizados; Python aparece quando a análise fica mais complexa. A Microsoft descreve o papel do data analyst justamente como alguém que prepara, modela, visualiza e analisa dados com ferramentas como Power BI.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>BI não é só gráfico bonito. BI é o sistema de decisões; visualização é só uma parte dele.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "Business Intelligence é o uso de dados, relatórios e dashboards para apoiar decisões de negócio."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "BI reúne processos e ferramentas para coletar, organizar e analisar dados e transformar isso em indicadores, relatórios e dashboards que ajudam a empresa a tomar decisões melhores."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"How is BI different from Data Analytics?"</li>
+          <li>"What tools are used in BI?"</li>
+          <li>"What is a BI dashboard?"</li>
+          <li>"Why is BI important for companies?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Dizer que BI é "apenas Power BI" é errado. BI é mais amplo que uma ferramenta. Dizer que BI serve só para mostrar números também é errado: ele serve para orientar decisão.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Na Loja Aurora, o diretor pergunta: "Por que o faturamento caiu no último mês?" O que BI entregaria para ajudar?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">BI entregaria um dashboard com receita por dia, região, produto, canal de venda e comparação com meses anteriores. A resposta não é só "o faturamento caiu", mas onde, quando e em qual segmento caiu.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>BI serve principalmente para quê?</li>
+          <li>BI é a mesma coisa que dashboard?</li>
+          <li>Que tipo de decisão BI ajuda a tomar?</li>
+          <li>Qual ferramenta é comum em BI?</li>
+          <li>BI olha mais para passado, presente ou futuro?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">Business Intelligence Explained: What is BI and How Does it Work?</div>
+            <div class="video-meta"><span>D&amp;V Philippines</span><span>~4 min</span><span>Inglês</span></div>
+            <div class="video-why">Ótimo para entender a ideia geral de BI e sua relação com tomada de decisão.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=G_LhOqYBRLc" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">What is Business Intelligence (BI) and Why is it Important?</div>
+            <div class="video-meta"><span>Eye on Tech</span><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Preste atenção principalmente em why companies use BI.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=jtCsoEw3Ykg" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">What is Business Intelligence? BI for Beginners</div>
+            <div class="video-meta"><span>LearnBIonline</span><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Bom para reforçar a definição básica antes de entrar em dashboards e ferramentas.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=-I23qGB6JdY" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DATA VIZ -->
+    <section class="content-section" id="sec-dataviz">
+      <div class="eyebrow">Conceito 2 de 8</div>
+      <h2 class="section-title">Data Visualization / Visualização de Dados</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>É transformar dados em gráficos, mapas, tabelas visuais e dashboards para enxergar padrões mais rápido. É como trocar uma parede de números por uma imagem que o cérebro entende melhor.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>Visualização de dados é a representação gráfica da informação, usando elementos como gráficos, linhas, barras, mapas e dashboards interativos para comunicar tendências, padrões, exceções e comparações. Tableau descreve isso como uma forma de entender tendências, outliers e padrões de forma acessível.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque muitos insights ficam escondidos em tabelas. Um gráfico certo mostra sazonalidade, queda, crescimento e anomalias em segundos. Sem visualização, a análise fica lenta e confusa.</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>Na Loja Aurora, um gráfico de linha mostra faturamento por mês; um gráfico de barras compara regiões; um mapa mostra onde vende mais; um scatter plot pode mostrar relação entre desconto e margem.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Power BI e Tableau são fortes para dashboards; Excel é ótimo para começar; Looker Studio ajuda em painéis leves; Python (Matplotlib/Seaborn/Plotly) entra quando você quer mais controle ou automação.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>Visualização não é EDA. Visualização é a forma de mostrar dados; EDA é o processo de explorar os dados para entender o que está acontecendo. Visualização pode fazer parte da EDA, mas não é a mesma coisa.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "Data visualization é a representação gráfica dos dados para facilitar entendimento e comunicação."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "É o uso de gráficos, mapas e dashboards para tornar padrões, tendências e outliers visíveis, ajudando tanto a análise quanto a comunicação com pessoas não técnicas."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"What makes a good chart?"</li>
+          <li>"When should you use a bar chart instead of a line chart?"</li>
+          <li>"How do you avoid misleading charts?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Achar que quanto mais cores, melhor. Em geral, o bom gráfico é o que comunica com clareza, não o que chama mais atenção. Outro erro é usar o tipo errado de gráfico para o tipo de dado.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Qual visual você usaria para comparar vendas por região e por quê?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Barras. É melhor para comparar categorias. Linha seria melhor se a ideia fosse ver evolução no tempo.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>Qual visual é melhor para séries temporais?</li>
+          <li>O que é um outlier?</li>
+          <li>Visualização serve só para apresentação?</li>
+          <li>Qual problema acontece com gráficos mal escolhidos?</li>
+          <li>Um mapa ajuda em qual tipo de análise?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">What is Data Visualization? Best Practices You Should Follow!</div>
+            <div class="video-meta"><span>D&amp;V Philippines</span><span>~4 min</span><span>Inglês</span></div>
+            <div class="video-why">Observe a diferença entre simplesmente apresentar números e comunicar informação visualmente.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=I3450sh1eDo" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">Exploratory Data Analysis and Visualisation</div>
+            <div class="video-meta"><span>~10 min</span><span>Inglês</span></div>
+            <div class="video-why">Especialmente interessante porque conecta Data Visualization + EDA.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=OpN_MGWbpP0" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ETL -->
+    <section class="content-section" id="sec-etl">
+      <div class="eyebrow">Conceito 3 de 8</div>
+      <h2 class="section-title">ETL Process / Processo ETL</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>ETL significa Extract, Transform, Load: extrair dados de fontes, transformar para ficarem úteis e carregar em um lugar final. Pense em pegar ingredientes, lavar/cortar/cozinhar e só depois servir o prato.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>ETL é um processo de integração de dados que consolida informações de várias fontes em um repositório unificado. Na etapa de transformação, os dados são ajustados por regras de negócio e, depois, carregados no destino, muitas vezes passando por staging tables.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque dados brutos raramente chegam prontos para análise. ETL cria padronização, confiança e compatibilidade entre sistemas. Sem isso, cada relatório "fala uma língua".</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>A Loja Aurora recebe vendas do site, do app e da loja física. ETL extrai os três, transforma datas e moedas, remove duplicados e carrega tudo num data warehouse para o dashboard mensal.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>SQL, Power Query, Azure Data Factory, SSIS, dbt, Python e data warehouses. Microsoft mostra ETL em Azure Data Factory e SSIS como formas de criar pipelines e transformações; IBM descreve ETL como processo de combinar, limpar e organizar dados para um dataset consistente.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>ETL não é sinônimo de limpeza. Limpeza pode acontecer dentro do ETL, mas ETL é o pipeline completo de extração, transformação e carregamento.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "ETL é o processo de extrair dados, transformá-los e carregá-los em um destino analítico."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "ETL integra dados de várias fontes, aplica regras de negócio e padronização, e entrega uma base confiável para análise e BI."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"How is ETL different from ELT?"</li>
+          <li>"What happens in each ETL step?"</li>
+          <li>"Why do we use staging tables?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Dizer que transformação é só trocar o formato da coluna é pouco. Transformação também inclui regras de negócio, padronização, agregação e preparação para o destino.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Você recebeu arquivos CSV de 3 sistemas com datas em formatos diferentes. O que faz no ETL?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Extrai os arquivos, transforma datas para um padrão único, padroniza nomes e tipos, remove duplicados e carrega tudo em uma tabela final pronta para BI.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>O que significa o T do ETL?</li>
+          <li>Onde a transformação acontece?</li>
+          <li>ETL resolve qual problema principal?</li>
+          <li>Qual é o papel do destino final?</li>
+          <li>ETL pode usar staging tables?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">ETL Explained in 2 Minutes</div>
+            <div class="video-meta"><span>~2 min</span><span>Inglês</span></div>
+            <div class="video-why">Concentre-se na sequência: Extract → Transform → Load.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=8Chrkxea2vQ" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">Master ETL with Azure Data Factory in Minutes</div>
+            <div class="video-meta"><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Depois de entender o conceito, veja como ETL aparece em uma ferramenta utilizada profissionalmente.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=V1tzvtufdWY" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. DATA MODELING -->
+    <section class="content-section" id="sec-datamodeling">
+      <div class="eyebrow">Conceito 4 de 8</div>
+      <h2 class="section-title">Data Modeling / Modelagem de Dados</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>É organizar os dados para que façam sentido e sejam fáceis de consultar. É como desenhar o mapa de uma cidade antes de construir ruas e bairros.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>Modelagem de dados é a definição da estrutura, relacionamentos, granularidade e regras dos dados para suportar análise, relatórios e performance. Em BI, isso normalmente aparece como um modelo estrela, com fatos e dimensões.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque dados "achatados" ou mal relacionados geram relatórios lentos, confusos e errados. Um bom modelo facilita consultas, reduz ambiguidade e melhora governança.</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>Na Loja Aurora, você pode ter uma tabela fato Sales com DateKey, ProductKey, CustomerKey, Revenue e Quantity; e dimensões Date, Product, Customer, Region. Assim você analisa vendas por mês, produto ou região sem duplicar lógica.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Power BI, Tableau, Excel Power Pivot, SQL, dbt e bancos relacionais. A Microsoft destaca que modelos semânticos e star schema são bases de relatórios e visualização; Tableau também trata dimensões e medidas como blocos centrais da análise.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>Modelagem não é só "juntar tabelas com join". Ela define a estrutura lógica correta para perguntas de negócio, não apenas a união física dos dados.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "Data modeling é organizar tabelas e relacionamentos para analisar dados de forma eficiente."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "É a definição de fatos, dimensões, granularidade e relacionamentos para que relatórios e consultas sejam consistentes, rápidos e fáceis de entender."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"What is a fact table?"</li>
+          <li>"What is a dimension table?"</li>
+          <li>"Why is star schema popular in BI?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Confundir fato com dimensão. Dimensão descreve o "quem/onde/quando/o quê"; fato mede "quanto". Outro erro é criar muitos relacionamentos complexos sem necessidade.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Na Loja Aurora, quais seriam fatos e quais seriam dimensões?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Fatos: receita, quantidade vendida, desconto, custo. Dimensões: data, produto, cliente, região, canal.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>O que é granularidade?</li>
+          <li>Qual a função de uma dimensão?</li>
+          <li>Qual a função de uma fato?</li>
+          <li>Star schema é usado para quê?</li>
+          <li>Modelo ruim afeta o quê?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="callout">
+          <span class="callout-label">Recomendação</span>
+          Assista primeiro ao de 10 minutos. Ele já cobre exatamente o que você precisa para começar.
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">Star Schema in 10 Minutes: The ONLY Explanation You Need!</div>
+            <div class="video-meta"><span>Pragmatic Works</span><span>~10 min</span><span>Inglês</span></div>
+            <div class="video-why">Explica fact tables, dimension tables, relacionamentos, keys e star schema. Publicado em setembro de 2025, disponível atualmente.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=mPnnygpy2lY" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">Learn Data Modelling &amp; Star Schema for Power BI in 20 minutes</div>
+            <div class="video-meta"><span>~20 min</span><span>Inglês</span></div>
+            <div class="video-why">Use como segundo vídeo, depois do anterior, para consolidar o conceito.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=4ePNrdxWtY0" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CLEANING/TRANSFORM/INTEGRATION -->
+    <section class="content-section" id="sec-cleaning">
+      <div class="eyebrow">Conceito 5 de 8</div>
+      <h2 class="section-title">Data Cleaning, Data Transformation e Data Integration</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p><strong>Data Cleaning</strong> = arrumar erros.<br>
+        <strong>Data Transformation</strong> = mudar a forma/estrutura dos dados para ficarem úteis.<br>
+        <strong>Data Integration</strong> = juntar dados de fontes diferentes em uma visão única.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>Cleaning corrige problemas como nulos, duplicados e valores inválidos; transformation converte tipos, cria campos, normaliza e agrega; integration combina dados de múltiplos sistemas em um formato harmonizado.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque dados do mundo real vêm imperfeitos e espalhados. Sem isso, a análise gera conclusões erradas. Boa limpeza e integração aumentam confiabilidade e uso analítico.</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p><strong>Cleaning:</strong> remover pedidos duplicados.<br>
+        <strong>Transformation:</strong> converter 01/01/2026 e 2026-01-01 para o mesmo formato; criar Month.<br>
+        <strong>Integration:</strong> unir site, app e loja física em uma tabela única de vendas.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Power Query, Excel, SQL, Python/Pandas, dbt, Azure Data Factory, SSIS. Microsoft mostra limpeza com Power Query e DQS; IBM e Microsoft mostram integração e transformação como parte de ETL e pipelines.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>Cleaning não é Transformation. Exemplo: corrigir "Sao Paulo" para "São Paulo" é cleaning; criar a coluna Revenue = Price * Quantity é transformation. Integrar é juntar fontes; transformar é mudar os dados já dentro do fluxo.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "Cleaning corrige erros; transformation prepara e reorganiza os dados; integration combina dados de várias fontes."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "São etapas complementares: primeiro eu corrijo problemas de qualidade, depois transformo tipos e estruturas para análise, e por fim integro diferentes fontes em uma visão única e confiável."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"What are common cleaning issues?"</li>
+          <li>"When would you transform data?"</li>
+          <li>"Why is integration hard across systems?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Dizer que transformar e integrar são a mesma coisa. Não são. Integrar é combinar fontes; transformar é mudar a forma dos dados. Outro erro: achar que cleaning é opcional. Em geral, não é.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Como você trataria datas em formatos diferentes e clientes duplicados?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Padronizaria as datas com transformação, removeria/mesclaria duplicados com cleaning, e só depois integraria tudo na base final.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>Qual etapa corrige duplicados?</li>
+          <li>Qual etapa junta fontes diferentes?</li>
+          <li>Qual etapa cria novos campos?</li>
+          <li>Cleaning pode fazer parte do ETL?</li>
+          <li>Transformation sempre muda o conteúdo?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">Cleaning, Transformation, and Preparation for Analysis</div>
+            <div class="video-meta"><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Preste atenção na diferença entre cleaning e transformation.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=D7PCKtWAxVo" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">Data Cleaning Explained: Garbage In, Garbage Out</div>
+            <div class="video-meta"><span>&lt; 5 min</span><span>Inglês</span></div>
+            <div class="video-why">Memorize a ideia: Garbage In → Garbage Out. Se os dados de entrada são ruins, sua análise pode ser ruim também.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=JsqMx1iyMrg" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. DATA QUALITY -->
+    <section class="content-section" id="sec-quality">
+      <div class="eyebrow">Conceito 6 de 8</div>
+      <h2 class="section-title">Data Quality / Qualidade de Dados</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>É o quanto os dados são bons para o uso pretendido. Dados de qualidade são corretos, completos, consistentes e confiáveis.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>Data quality é o grau em que um conjunto de dados atende critérios como accuracy, completeness, validity, consistency, uniqueness, timeliness e fitness for purpose. Microsoft também trata qualidade por regras e scores para medir se o dado está em estado aceitável.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque uma análise só é tão boa quanto os dados por trás dela. Dados ruins produzem dashboards ruins, decisões ruins e desconfiança na área de dados.</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>Na Loja Aurora, se a mesma venda aparece duas vezes, a receita fica inflada. Se a data está vazia, o relatório mensal quebra. Se Region tem SP, Sao Paulo e São Paulo, a análise regional fica distorcida.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Excel e SQL ajudam a detectar problemas; Power Query limpa; Power BI e Purview podem medir qualidade com regras e scores; Python ajuda a automatizar checagens; DQS e outros catálogos ajudam na governança.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>Data quality não é só "ter dados bonitos". É ter dados adequados para a finalidade. Um dado pode estar tecnicamente correto e ainda assim ser inútil para a pergunta errada.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "Data quality é o grau de confiabilidade e adequação dos dados para o uso pretendido."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "É a avaliação de critérios como completude, consistência, validade e atualidade. Sem qualidade de dados, qualquer análise ou KPI pode se tornar enganoso."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"How do you measure data quality?"</li>
+          <li>"What is a data quality rule?"</li>
+          <li>"Why do duplicates hurt reporting?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Pensar que qualidade é só ausência de erro. Também envolve consistência, atualidade e adequação ao objetivo. Outro erro é medir só uma coluna e ignorar o contexto do negócio.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Uma coluna tem 5% de valores nulos. Isso é sempre um problema?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Não necessariamente. Depende da coluna e do uso. Se for uma coluna essencial, pode ser grave; se for opcional, talvez seja aceitável. Qualidade depende do contexto.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>O que é completeness?</li>
+          <li>O que é consistency?</li>
+          <li>Dados de boa qualidade garantem decisão certa?</li>
+          <li>Qualidade depende do uso?</li>
+          <li>O que acontece com duplicados em receita?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">Data Quality</div>
+            <div class="video-meta"><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Tente identificar quais características tornam um dado confiável: accuracy, completeness, consistency, validity, etc.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=IvFlSJdJrzE" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">Data Governance Explained in 5 Minutes</div>
+            <div class="video-meta"><span>~5 min</span><span>Inglês</span></div>
+            <div class="video-why">Não é exatamente o mesmo conceito de Data Quality, mas ajuda a entender por que empresas precisam controlar a qualidade dos dados.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=uPsUjKLHLAg" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. METRICS/KPIS/DIMENSIONS -->
+    <section class="content-section" id="sec-metrics">
+      <div class="eyebrow">Conceito 7 de 8</div>
+      <h2 class="section-title">Metrics, KPIs and Dimensions</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>Uma <strong>metric</strong> é qualquer medida numérica. Um <strong>KPI</strong> é uma métrica-chave ligada a um objetivo importante. Uma <strong>dimension</strong> é um eixo de análise, como tempo, região, produto ou cliente. Tableau e Microsoft tratam medidas e dimensões como blocos fundamentais de análise.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>Métricas quantificam algo; KPIs são as métricas que realmente representam o sucesso de um objetivo; dimensões são atributos categóricos ou descritivos usados para segmentar e analisar as métricas.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Empresas precisam medir desempenho. Mas nem toda métrica importa. KPIs evitam que a equipe se perca em números irrelevantes. Dimensões permitem perguntar "em qual região?", "em qual produto?", "em qual mês?".</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>Na Loja Aurora: Metric = número de pedidos. KPI = taxa de conversão ou receita mensal. Dimensions = região, produto, mês, canal. Você pode medir KPI por dimensão: receita por região, conversão por canal, ticket médio por mês.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Power BI e Tableau para visualizar; SQL para calcular; Excel para testar fórmulas; Looker e dbt para métricas padronizadas; catálogos e camadas semânticas ajudam a manter uma definição única.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>Toda KPI é uma métrica, mas nem toda métrica é KPI. Isso é uma das pegadinhas mais comuns. Dimensão não é medida: dimensão segmenta; medida quantifica.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "Metric is any number you track; KPI is a key metric tied to a goal; dimension is a descriptive field used to slice the metric."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "Métricas são medidas numéricas, KPIs são as métricas mais importantes para objetivos de negócio, e dimensões são os atributos que usam para segmentar a análise."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"What is the difference between a metric and a KPI?"</li>
+          <li>"Can a KPI change over time?"</li>
+          <li>"What is a measure vs a dimension?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Chamar tudo de KPI. Isso enfraquece a análise. Outro erro é colocar um texto como medida. Se o campo serve para segmentar, ele é dimensão.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Em um dashboard de vendas, classifique: Revenue, Region, Orders, Conversion Rate.</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Revenue e Orders são métricas; Conversion Rate pode ser KPI se for objetivo principal; Region é dimensão.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>KPI é sempre uma métrica?</li>
+          <li>Região é métrica ou dimensão?</li>
+          <li>Toda métrica é KPI?</li>
+          <li>O que significa "slice" da análise?</li>
+          <li>Qual é a função de uma dimensão?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">Intro to KPIs - What are Key Performance Indicators?</div>
+            <div class="video-meta"><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Preste atenção na diferença entre simplesmente medir algo e medir algo que representa um business objective.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=qgzscWaAmtY" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">What is a KPI | Key Performance Indicator</div>
+            <div class="video-meta"><span>curta</span><span>Inglês</span></div>
+            <div class="video-why">Reforça definição e exemplos de KPI.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=5Z50fbsg1nM" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. EDA -->
+    <section class="content-section" id="sec-eda">
+      <div class="eyebrow">Conceito 8 de 8</div>
+      <h2 class="section-title">EDA (Exploratory Data Analysis) / Análise Exploratória de Dados</h2>
+      <div class="article">
+
+        <h3 class="sub">Definição simples</h3>
+        <p>EDA é a etapa de "conhecer" os dados antes de tirar conclusões ou criar modelos. Você olha distribuições, valores faltando, padrões, relações e outliers. Databricks e Microsoft descrevem EDA como uma forma de revisar o dataset cedo para entender melhor o que ele contém.</p>
+
+        <h3 class="sub">Definição profissional</h3>
+        <p>EDA é um processo iterativo de exploração visual e estatística para resumir o comportamento dos dados, levantar hipóteses, detectar problemas de qualidade e orientar decisões analíticas ou de modelagem.</p>
+
+        <h3 class="sub">Por que existe</h3>
+        <p>Porque não faz sentido construir análise ou modelo sem entender a base. EDA revela erros, padrões, relações e anomalias que mudam completamente a interpretação.</p>
+
+        <h3 class="sub">Exemplo prático</h3>
+        <p>Na Loja Aurora, antes de criar o dashboard, você faz EDA e descobre que: 8% das datas estão vazias, há duplicados, algumas regiões aparecem com nomes diferentes e as vendas têm pico em novembro. Isso muda o que você vai limpar e como vai modelar.</p>
+
+        <h3 class="sub">Ferramentas</h3>
+        <p>Python com Pandas, Matplotlib e notebooks; Excel para olhar amostras; SQL para consultas exploratórias; Power BI/Tableau para exploração visual; Databricks e Fabric para notebooks e fluxos analíticos.</p>
+
+        <h3 class="sub">Diferença importante</h3>
+        <p>EDA não é "fazer gráfico porque sim". Ela tem intenção investigativa: entender os dados, levantar hipóteses e achar problemas antes da fase final.</p>
+
+        <h3 class="sub">Como responder em entrevista</h3>
+        <div class="callout">
+          <span class="callout-label">Curta</span>
+          "EDA is the step where we explore the data to understand distributions, relationships, and potential problems."
+        </div>
+        <div class="callout">
+          <span class="callout-label">Mais completa</span>
+          "Exploratory Data Analysis é a exploração inicial dos dados, usando estatística e visualização para entender o dataset, encontrar outliers, detectar problemas de qualidade e orientar a análise ou modelagem."
+        </div>
+
+        <h3 class="sub">Perguntas de follow-up</h3>
+        <ul>
+          <li>"What do you look for in EDA?"</li>
+          <li>"Why is EDA important before modeling?"</li>
+          <li>"Which charts are useful in EDA?"</li>
+        </ul>
+
+        <h3 class="sub">Pegadinhas comuns</h3>
+        <div class="callout amber">
+          <span class="callout-label">Atenção</span>
+          Fazer EDA só depois de tudo pronto. O certo é EDA cedo. Outro erro é ignorar o contexto do negócio e olhar apenas números sem interpretar.
+        </div>
+
+        <h3 class="sub">Mini exercício</h3>
+        <p>Quais 3 coisas você investigaria primeiro em uma nova base de vendas?</p>
+        <details>
+          <summary><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,5 0,10" fill="currentColor"/></svg>Ver solução explicada</summary>
+          <div class="details-body">Tipos de dados, valores faltantes/duplicados e distribuição das vendas por tempo, região e produto.</div>
+        </details>
+
+        <h3 class="sub">Quiz rápido</h3>
+        <ol>
+          <li>EDA vem antes ou depois da limpeza?</li>
+          <li>O que é um outlier?</li>
+          <li>EDA ajuda a criar hipóteses?</li>
+          <li>EDA usa só visualização?</li>
+          <li>O que você checa primeiro em uma nova base?</li>
+        </ol>
+
+        <h3 class="sub">📺 Vídeos recomendados</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="vtitle">Python EDA Explained in 3 Mins | Exploratory Data Analysis Workflow for Data Science</div>
+            <div class="video-meta"><span>Visual Design Studio</span><span>~3 min</span><span>Inglês</span></div>
+            <div class="video-why">Excelente para ter uma visão rápida do workflow de EDA: estatísticas, manipulação, univariate analysis e multivariate analysis. Publicado em janeiro de 2026, disponível atualmente.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=MF6a5RTLn7g" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+          <div class="video-card">
+            <div class="vtitle">How to Do Data Exploration — Step-by-Step Tutorial on Real-Life Data</div>
+            <div class="video-meta"><span>mais longa</span><span>Inglês</span></div>
+            <div class="video-why">Assista depois do vídeo de 3 minutos para observar como EDA funciona em um dataset real.</div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=OY4eQrekQvs" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFFS -->
+    <section class="content-section" id="sec-diffs">
+      <div class="eyebrow">Conectando os pontos</div>
+      <h2 class="section-title">Diferenças entre conceitos parecidos</h2>
+      <div class="article">
+        <div class="diff-block">
+          <h4>BI × Data Analytics</h4>
+          <p>BI organiza dados para apoiar decisões do negócio, geralmente com foco em relatórios, dashboards e acompanhamento operacional; data analytics é a investigação e interpretação dos dados para encontrar padrões e responder perguntas, e costuma ser uma parte do trabalho maior de data science.</p>
+        </div>
+        <div class="diff-block">
+          <h4>Data Cleaning × Data Transformation × Data Integration</h4>
+          <p>Cleaning corrige problemas; transformation muda formato/estrutura/valor para uso analítico; integration une múltiplas fontes em uma visão única.</p>
+        </div>
+        <div class="diff-block">
+          <h4>Data Visualization × EDA</h4>
+          <p>Visualização é a forma de mostrar dados; EDA é o processo de explorar e entender os dados. Uma pode existir sem a outra, mas geralmente trabalham juntas.</p>
+        </div>
+        <div class="diff-block">
+          <h4>Metrics × KPIs × Dimensions</h4>
+          <p>Metric = qualquer número medido; KPI = métrica-chave ligada a objetivo; dimension = eixo de segmentação.</p>
+        </div>
+        <div class="diff-block">
+          <h4>Dimension × Measure</h4>
+          <p>Dimension descreve e segmenta; measure agrega e quantifica. Tableau identifica campos como dimensões ou medidas para montar análise.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLS -->
+    <section class="content-section" id="sec-tools">
+      <div class="eyebrow">Conectando os pontos</div>
+      <h2 class="section-title">Ferramentas na prática, por contexto</h2>
+      <div class="article">
+        <p>Excel é ótimo para inspeção rápida, protótipos e validação manual. SQL é a linguagem mais importante para consultar bases e testar hipóteses. Python + Pandas ajudam em limpeza, transformação, EDA e automação. Power BI e Tableau entram quando você quer modelar, criar métricas e visualizar para a empresa. dbt aparece muito na transformação e padronização de modelos analíticos. Bancos de dados e data warehouses guardam a base preparada para BI. Microsoft e Tableau mostram claramente como modelagem, limpeza, visualização e análise se conectam em fluxos de dados modernos.</p>
+      </div>
+    </section>
+
+    <!-- BIG PICTURE -->
+    <section class="content-section" id="sec-bigpicture">
+      <div class="eyebrow">Conectando os pontos</div>
+      <h2 class="section-title">The Big Picture</h2>
+      <div class="article">
+        <p>O fluxo real costuma parecer com isto:</p>
+        <div class="flow">
+          <div class="flow-step">Raw Data</div><span class="flow-arrow">→</span>
+          <div class="flow-step">Cleaning</div><span class="flow-arrow">→</span>
+          <div class="flow-step">Transformation</div><span class="flow-arrow">→</span>
+          <div class="flow-step">Integration</div><span class="flow-arrow">→</span>
+          <div class="flow-step">Modeling</div><span class="flow-arrow">→</span>
+          <div class="flow-step">EDA</div><span class="flow-arrow">→</span>
+          <div class="flow-step">BI / Reporting</div><span class="flow-arrow">→</span>
+          <div class="flow-step">Visualization</div><span class="flow-arrow">→</span>
+          <div class="flow-step">Decision Making</div>
+        </div>
+        <p>Os dados brutos chegam bagunçados. A limpeza corrige erros; a transformação padroniza e cria campos úteis; a integração junta fontes diferentes; a modelagem organiza fatos e dimensões; a EDA ajuda a entender o dataset; BI usa isso para criar relatórios e dashboards; a visualização comunica o resultado; e a empresa toma decisão com mais confiança. Na prática, essas etapas podem se misturar, voltar para trás e repetir, porque projetos reais raramente são lineares.</p>
+      </div>
+    </section>
+
+    <!-- REVIEW TABLE -->
+    <section class="content-section" id="sec-reviewtable">
+      <div class="eyebrow">Conectando os pontos</div>
+      <h2 class="section-title">Tabela de revisão</h2>
+      <div class="article">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Concept</th><th>Simple definition</th><th>Main purpose</th><th>Example</th><th>Common tools</th><th>Related concepts</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>BI</strong></td><td>Usa dados para apoiar decisões</td><td>Relatórios, dashboards, gestão</td><td>Receita por mês</td><td>Power BI, Tableau, SQL, Excel</td><td>Data viz, KPIs</td></tr>
+              <tr><td><strong>Data Visualization</strong></td><td>Mostrar dados graficamente</td><td>Entender padrões rápido</td><td>Linha de vendas</td><td>Power BI, Tableau, Excel, Python</td><td>EDA, BI</td></tr>
+              <tr><td><strong>ETL</strong></td><td>Extrair, transformar, carregar</td><td>Unificar dados</td><td>Vendas de 3 sistemas</td><td>ADF, SSIS, SQL, dbt</td><td>Cleaning, integration</td></tr>
+              <tr><td><strong>Data Modeling</strong></td><td>Organizar tabelas e relações</td><td>Consulta clara e rápida</td><td>Fato Sales + dimensões</td><td>SQL, Power BI, Tableau</td><td>Star schema, facts, dimensions</td></tr>
+              <tr><td><strong>Cleaning</strong></td><td>Corrigir erros nos dados</td><td>Melhorar qualidade</td><td>Remover duplicados</td><td>Excel, SQL, Python, Power Query</td><td>Data quality</td></tr>
+              <tr><td><strong>Transformation</strong></td><td>Mudar forma/estrutura</td><td>Preparar para análise</td><td>Padronizar datas</td><td>SQL, dbt, Python</td><td>ETL, modeling</td></tr>
+              <tr><td><strong>Integration</strong></td><td>Combinar fontes</td><td>Visão única</td><td>Site + app + loja física</td><td>ETL tools, SQL, ADF</td><td>Data warehouse</td></tr>
+              <tr><td><strong>Data Quality</strong></td><td>Adequação dos dados ao uso</td><td>Confiabilidade</td><td>Nulos, duplicados, inconsistência</td><td>Purview, DQS, SQL, Python</td><td>Cleaning, governance</td></tr>
+              <tr><td><strong>Metrics</strong></td><td>Qualquer número medido</td><td>Medir desempenho</td><td>Orders</td><td>SQL, Excel, BI tools</td><td>KPIs</td></tr>
+              <tr><td><strong>KPI</strong></td><td>Métrica-chave de objetivo</td><td>Acompanhar sucesso</td><td>Conversion rate</td><td>Power BI, Tableau</td><td>Metrics</td></tr>
+              <tr><td><strong>Dimension</strong></td><td>Eixo de análise</td><td>Segmentar métricas</td><td>Region, Product</td><td>Tableau, Power BI</td><td>Measures</td></tr>
+              <tr><td><strong>EDA</strong></td><td>Explorar e entender dados</td><td>Descobrir padrões/problemas</td><td>Outliers de vendas</td><td>Python, SQL, notebooks</td><td>Visualization, cleaning</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 30 QUESTIONS -->
+    <section class="content-section" id="sec-questions30">
+      <div class="eyebrow">Prática</div>
+      <h2 class="section-title">30 perguntas de revisão</h2>
+      <div class="article">
+        <ol>
+          <li>O que é BI em suas próprias palavras?</li>
+          <li>BI serve para decidir o quê?</li>
+          <li>O que é data visualization?</li>
+          <li>Quando um gráfico ajuda mais que uma tabela?</li>
+          <li>O que significa ETL?</li>
+          <li>Qual a função de cada etapa do ETL?</li>
+          <li>O que é data modeling?</li>
+          <li>O que é uma fact table?</li>
+          <li>O que é uma dimension table?</li>
+          <li>Qual a diferença entre cleaning e transformation?</li>
+          <li>Qual a diferença entre transformation e integration?</li>
+          <li>O que é data quality?</li>
+          <li>Quais critérios fazem parte da qualidade de dados?</li>
+          <li>O que é a difference entre metric e KPI?</li>
+          <li>O que é uma dimension?</li>
+          <li>Dimension é igual a measure?</li>
+          <li>O que é EDA?</li>
+          <li>EDA acontece em qual momento do projeto?</li>
+          <li>Qual a relação entre EDA e visualização?</li>
+          <li>Qual ferramenta você usaria para explorar uma base pequena?</li>
+          <li>Qual ferramenta você usaria para consultar dados de um warehouse?</li>
+          <li>Por que o modelo estrela é útil?</li>
+          <li>Qual problema dados duplicados causam?</li>
+          <li>Por que datas inconsistentes são perigosas?</li>
+          <li>Como um KPI pode ser medido por dimensão?</li>
+          <li>Por que BI não é só dashboard?</li>
+          <li>Por que ETL não é só limpeza?</li>
+          <li>Por que data quality depende do contexto?</li>
+          <li>O que você olharia primeiro em uma base nova?</li>
+          <li>Como esses conceitos se conectam em um projeto real?</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- INTERVIEW SIMULATION -->
+    <section class="content-section" id="sec-interview">
+      <div class="eyebrow">Prática</div>
+      <h2 class="section-title">Simulação de entrevista para Junior Data Analyst / BI Analyst</h2>
+      <div class="article">
+        <p>Vou deixar o formato pronto para você treinar. Responda uma por vez e eu avalio no mesmo estilo que você pediu.</p>
+
+        <div class="card">
+          <h4>Pergunta 1: What is Business Intelligence?</h4>
+          <p><em>O que o entrevistador quer saber:</em> se você entende a finalidade de BI e não só a palavra.</p>
+          <div class="callout red"><span class="callout-label">Resposta ruim</span>"É fazer dashboards."</div>
+          <div class="callout amber"><span class="callout-label">Resposta boa</span>"BI é o uso de dados para gerar relatórios e apoiar decisões."</div>
+          <div class="callout green"><span class="callout-label">Resposta excelente</span>"Business Intelligence é um conjunto de processos e ferramentas que coletam, organizam, analisam e apresentam dados de negócio para transformar informação em decisão."</div>
+        </div>
+
+        <div class="card">
+          <h4>Pergunta 2: What is the difference between Metrics and KPIs?</h4>
+          <p><em>O que quer saber:</em> se você sabe priorizar indicadores.</p>
+          <div class="callout red"><span class="callout-label">Resposta ruim</span>"É a mesma coisa."</div>
+          <div class="callout amber"><span class="callout-label">Resposta boa</span>"Métrica é qualquer número; KPI é a métrica mais importante para um objetivo."</div>
+          <div class="callout green"><span class="callout-label">Resposta excelente</span>"Toda KPI é uma métrica, mas nem toda métrica é KPI. KPI mede o progresso de um objetivo específico; métricas apoiam a análise, mas nem todas têm valor estratégico."</div>
+        </div>
+
+        <div class="card">
+          <h4>Pergunta 3: What would you do if a dashboard shows unexpected revenue?</h4>
+          <p><em>O que quer saber:</em> se você pensa com EDA, qualidade e modelagem.</p>
+          <div class="callout green"><span class="callout-label">Resposta excelente esperada</span>Investigar a base, checar duplicados, datas, filtros, transformação e fonte dos dados antes de concluir que o negócio mudou.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CHALLENGE -->
+    <section class="content-section" id="sec-challenge">
+      <div class="eyebrow">Prática</div>
+      <h2 class="section-title">Desafio final</h2>
+      <div class="article">
+        <div class="callout">
+          <span class="callout-label">Cenário</span>
+          A Loja Aurora recebe vendas de três sistemas: site, app e loja física. Os dados têm duplicados, datas em formatos diferentes, regiões escritas de formas inconsistentes e alguns valores nulos. A diretoria quer um dashboard com receita mensal por região.
+        </div>
+        <h3 class="sub">Perguntas</h3>
+        <ol>
+          <li>O que você faria primeiro e por quê?</li>
+          <li>Quais problemas são de quality, cleaning, transformation e integration?</li>
+          <li>Como você modelaria os dados?</li>
+          <li>Que dimensões e métricas usaria?</li>
+          <li>Que gráficos colocaria no dashboard?</li>
+          <li>Como você explicaria o resultado para a diretoria?</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="content-section" id="sec-checklist">
+      <div class="eyebrow">Prática</div>
+      <h2 class="section-title">Checklist de domínio</h2>
+      <div class="article">
+        <p>Clique no nível que representa onde você está hoje em cada tópico — é só um marcador visual para te ajudar a acompanhar o progresso.</p>
+        <div class="checklist-legend">
+          <div class="legend-item">🟥 Não entendo</div>
+          <div class="legend-item">🟧 Entendo a definição</div>
+          <div class="legend-item">🟨 Consigo explicar com um exemplo</div>
+          <div class="legend-item">🟩 Consigo aplicar</div>
+          <div class="legend-item">🟦 Consigo responder entrevista</div>
+          <div class="legend-item">🟪 Consigo explicar para outra pessoa e responder follow-up</div>
+        </div>
+
+        <div id="checklistContainer"></div>
+      </div>
+    </section>
+
+    <div class="toc-hint">Loja Aurora · guia de estudo organizado a partir das suas anotações — nenhum conteúdo original foi resumido.</div>
+
+  </main>
+</div>
+
+<script>
+  // ---- Navigation between sections ----
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('.content-section');
+
+  function activate(target){
+    sections.forEach(s => s.classList.toggle('active', s.id === 'sec-' + target));
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.target === target));
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => activate(item.dataset.target));
+  });
+
+  activate('intro');
+
+  // ---- Sidebar search filter ----
+  document.getElementById('navSearch').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    navItems.forEach(item => {
+      const match = item.textContent.toLowerCase().includes(q);
+      item.style.display = match ? 'block' : 'none';
+    });
+    document.querySelectorAll('.nav-group-label').forEach(label => {
+      let sib = label.nextElementSibling;
+      let anyVisible = false;
+      while(sib && sib.classList && sib.classList.contains('nav-item')){
+        if(sib.style.display !== 'none'){ anyVisible = true; }
+        sib = sib.nextElementSibling;
+      }
+      label.style.display = (q === '' || anyVisible) ? 'block' : 'none';
+    });
+  });
+
+  // ---- Checklist builder ----
+  const levels = [
+    {emoji:'🟥', label:'Não entendo'},
+    {emoji:'🟧', label:'Entendo a definição'},
+    {emoji:'🟨', label:'Consigo explicar com um exemplo'},
+    {emoji:'🟩', label:'Consigo aplicar'},
+    {emoji:'🟦', label:'Consigo responder entrevista'},
+    {emoji:'🟪', label:'Consigo explicar para outra pessoa e responder follow-up'}
+  ];
+  const topics = [
+    'Business Intelligence',
+    'Data Visualization',
+    'ETL',
+    'Data Modeling',
+    'Cleaning / Transformation / Integration',
+    'Data Quality',
+    'Metrics / KPIs / Dimensions',
+    'EDA'
+  ];
+
+  const container = document.getElementById('checklistContainer');
+  topics.forEach((topic, ti) => {
+    const block = document.createElement('div');
+    block.className = 'checklist-topic';
+    const h4 = document.createElement('h4');
+    h4.textContent = topic;
+    block.appendChild(h4);
+    const row = document.createElement('div');
+    row.className = 'level-row';
+    levels.forEach((lvl, li) => {
+      const btn = document.createElement('button');
+      btn.className = 'level-btn';
+      btn.type = 'button';
+      btn.textContent = lvl.emoji + ' ' + lvl.label;
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+      row.appendChild(btn);
+    });
+    block.appendChild(row);
+    container.appendChild(block);
+  });
+</script>
+
+</body>
+</html>
